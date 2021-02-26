@@ -17,9 +17,9 @@ class GenreController extends AbstractController
  */
 public function formGenre(): Response
 {
-return $this->render('genre/index.html.twig', [
-'controller_name' => 'GenreController',
-]);
+	return $this->render('genre/index.html.twig', [
+		'controller_name' => 'GenreController',
+	]);
 }
 /**
  * @Route("/insertGenre", name="insertGenre")
@@ -35,4 +35,16 @@ return $this->render('genre/index.html.twig', [
 		'controller_name' => 'GenreController',
 		]);
 	}
+/**
+ * @Route("/listeGenre", name: "listeGenre")
+ */
+    public function listeGenre(Request $request, EntityManagerInterface $manager): Response
+    {
+		//Requête pour récupérer toute la table genre
+		$listeGenre = $manager->getRepository(Genre::class)->findAll();
+        return $this->render('genre/listeGenre.html.twig', [
+            'controller_name' => 'Liste des genres',
+            'listeGenre' => $listeGenre,
+        ]);
+    }
 }

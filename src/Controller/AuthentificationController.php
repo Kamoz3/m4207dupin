@@ -46,6 +46,7 @@ class AuthentificationController extends AbstractController
         }else{
             return $this->redirectToRoute('authentification');
         }
+        //dd($reponse);
         return new response(1);
     }
     /**
@@ -63,10 +64,10 @@ class AuthentificationController extends AbstractController
 	 */
 	public function deconnexion(Request $request, EntityManagerInterface $manager): Response
 	{
-	$sess = $request->getSession();
-	$sess->invalidate();
-	//$sess->clear();
-	$sess=$request->getSession()->clear();
-	return $this->redirectToRoute('authentification');
+    	$sess = $request->getSession();
+    	$sess->invalidate();
+    	//$sess->clear();
+    	$sess=$request->getSession()->clear();
+    	return $this->redirectToRoute('authentification');
 	}
 }
