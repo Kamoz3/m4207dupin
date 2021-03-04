@@ -38,6 +38,11 @@ class Document
      */
     private $typeID;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $nom;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -87,6 +92,18 @@ class Document
     public function setTypeID(?Genre $typeID): self
     {
         $this->typeID = $typeID;
+
+        return $this;
+    }
+
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function setNom(string $nom): self
+    {
+        $this->nom = $nom;
 
         return $this;
     }

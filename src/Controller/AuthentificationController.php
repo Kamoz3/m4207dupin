@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 class AuthentificationController extends AbstractController
 {
-    /** 
+    /*
      * @Route("/authentification", name="authentification")
      */
     public function index(): Response
@@ -21,7 +21,7 @@ class AuthentificationController extends AbstractController
             'controller_name' => 'Page de connexion',
         ]);
     }
-    /**
+    /*
      * @Route("/connexion", name="connexion")
      */
     public function connexion(Request $request, EntityManagerInterface $manager): Response
@@ -32,42 +32,57 @@ class AuthentificationController extends AbstractController
         //connexion avec la BD et récupération du couple id/password
         $aUser = $manager->getRepository(Utilisateur::class)->findBy(["nom"=>$identifiant, "code"=>$password]);
         //test de l'existence d'un tel couple
-        if (sizeof($aUser)>0){
-            //récupération de l'utilisateur
-            $utilisateur = new Utilisateur;
-            $utilisateur = $aUser[0]; 
-            //démarrage d'une session
-            $sess = $request->getSession();
-            //Créer des variables de session
-            $sess->set("idUtilisateur", $utilisateur -> getId());
-            $sess->set("nomUtilisateur", $utilisateur -> getNom());
-            $sess->set("prenomUtilisateur", $utilisateur -> getPrenom());
-            return $this->redirectToRoute('dashboard');             
-        }else{
-            return $this->redirectToRoute('authentification');
-        }
+         if (sizeof($aUser)>0){
+             //Récupération de l'utilisateur 
+             $utilisateur = new Utilisateur;
+             $utilisateur = $aUser[0];
+             //Démarrage d'une session
+             $sess = $request->getSession();
+             //Créer des variables de session
+             $sess->set("idUtilisateur", $utilisateur->getId());
+             $sess->set("nomUtilisateur", $utilisateur->getNom());
+             $sess->set("prenomUtilisateur", $utilisateur->getPrenom());
+             return $this->redirectToRoute('dashboard');             
+         }else{
+             return $this->redirectToRoute('authentification');
+         }
         //dd($reponse);
         return new response(1);
     }
-    /**
+    /*
      * @Route("/dashboard", name="dashboard")
      */
     public function dashboard(Request $request, EntityManagerInterface $manager): Response
     {
         $sess = $request->getSession();
         return $this->render('authentification/dashboard.html.twig', [
-            'controller_name' => 'Espace client',
+            'controller_name' => 'Espace Client',
         ]);
     }
-	/** 
-	 * Route("/deconnexion", name="deconnexion")
-	 */
-	public function deconnexion(Request $request, EntityManagerInterface $manager): Response
-	{
-    	$sess = $request->getSession();
-    	$sess->invalidate();
-    	//$sess->clear();
-    	$sess=$request->getSession()->clear();
-    	return $this->redirectToRoute('authentification');
-	}
+    /* 
+     * @Route("/deconnexion", name="deconnexion")
+     */
+    public function deconnexion(Request $request, EntityManagerInterface $manager): Response
+    {
+        $sess = $request->getSession();
+        $sess->invalidate();
+        //$sess->clear();
+        $sess=$request->getSession()->clear();
+        return $this->redirectToRoute('authentification');
+    }
+}
+class GedController extends AbstractController
+{
+    /*
+     * @Route("/uploadGed", name="uploadGed")
+     */
+    public function uploadGed(Request $request, EntityManagerInterface $manager): Response
+    {
+        //Requête pour récupérer toute la table genre
+        $listeGenre = $manager->getRepository(Genre::class)->findAll();
+        return $this->render('ged/uploadGed.html.twig', [
+            'controller_name' => "Upload d'un Document",
+            'listeGenre' => $listeGenre,
+    ]);
+    }
 }
