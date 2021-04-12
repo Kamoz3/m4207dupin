@@ -3,11 +3,58 @@
 {% block title %}Hello AuthentificationController!{% endblock %}
 
 {% block body %}
+    <h1>{{ controller_name }}</h1>
+    <h4> 
+    Numéro client : {{ app.session.get('idUtilisateur') }} <br>
+    {{ app.session.get('prenomUtilisateur') }} {{ app.session.get('nomUtilisateur') }} <br>
+    </h4>
+    <hr>
+    Nombre de documents accessibles : {{nbDocument}} <br>
+    <div class="row">
+        <div class="col-md-4">
+            Dernier document partagé : {{ doc.nom }}
+        </div>
+        <div class="col-md-6">
+        </div>
+        <div class="col-md-2">
+            <a href="/upload/{{ doc.chemin }}" target="blank">
+                <i class="bi bi-download"></i>
+            </a>
+        </div>
+    </div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Type</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Date</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table">
+               {% for item in listeDocumentUtilisateur %} 
 
-	<h1>{{ controller_name }}</h1>
-		<h4> Numéro client : {{ app.session.get('idUtilisateur') }} <br>
-			{{ app.session.get('prenomUtilisateur') }} {{ app.session.get('nomUtilisateur') }}<br>
-		</h4>
-
-
+               <th scope="row">{{ item.documentId.id }}</th>
+               <td>{{ item.documentId.typeId.type }}</td>
+               <td>{{ item.documentId.nom }}</td>
+               <td>{{ item.documentId.createdAt|date("d-m-y") }}</td>
+               <td> 
+                  <a href="/upload/{{ item.documentId.chemin }}" target="blank">
+                  <i class="bi bi-download"></i>
+                  </a>
+                  {% if item.autorisationId.id == 1 %}
+                     <a href="/deleteGed/{{ item.documentId.id }}">
+                     <i class="bi bi-trash"></i>
+                     </a>
+                     <a href="#exampleModal{{ item.documentId.id }}" data-toggle="modal" data-target="#exampleModal{{ item.documentId.id }}"><i class="bi bi-share-fill"></i></a>
+                  {% endif %}
+               </td>
+            </tr>
+               {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+    </div>
 {% endblock %}
